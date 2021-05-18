@@ -9,10 +9,7 @@ public interface OSCArgsParser<T> {
 
 
     default T forceParse(OSCArgs args) throws OSCParseException {
-        Optional<T> resultOpt = parse(args);
-
-        if (resultOpt.isPresent()) return resultOpt.get();
-        else throw new OSCParseException(args);
+        return parse(args).orElseThrow(() -> new OSCParseException(args));
     }
 
 }
