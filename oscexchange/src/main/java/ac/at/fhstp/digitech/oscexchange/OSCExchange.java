@@ -1,13 +1,29 @@
 package ac.at.fhstp.digitech.oscexchange;
 
+import android.os.AsyncTask;
+
 import java.util.ArrayList;
 
+import ac.at.fhstp.digitech.oscexchange.errors.OSCError;
 import ac.at.fhstp.digitech.oscexchange.errors.OSCErrorListener;
 
 public class OSCExchange {
 
     public static Builder buildNew() {
         return new Builder();
+    }
+
+    public static void runBetween(OSCExchange exchange, OSCDevicePair devicePair) {
+        LiveOSCExchange.start(exchange, devicePair);
+    }
+
+    public static void runBetweenAsync(OSCExchange exchange, OSCDevicePair devicePair) {
+        AsyncTask.execute(() -> runBetween(exchange, devicePair));
+    }
+
+    static void fail(OSCExchange exchange, OSCError error) {
+        if (exchange.errorListener != null)
+            exchange.errorListener.handle(error);
     }
 
 
