@@ -11,9 +11,9 @@ public class OSCExchange {
     }
 
 
-    private final OSCRequest[] requests;
-    private final OSCErrorListener errorListener;
-    private final OSCExchangeCompleteListener completeListener;
+    public final OSCRequest[] requests;
+    public final OSCErrorListener errorListener;
+    public final OSCExchangeCompleteListener completeListener;
 
 
     private OSCExchange(OSCRequest[] requests, OSCErrorListener errorListener, OSCExchangeCompleteListener completeListener) {
