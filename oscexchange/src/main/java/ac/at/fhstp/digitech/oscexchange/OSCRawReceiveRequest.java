@@ -10,4 +10,9 @@ final class OSCRawReceiveRequest extends OSCReceiveRequest {
         this.listener = listener;
     }
 
+    OSCRawReceiveRequest(OSCAddress address, OSCRawReceiveListener listener) {
+        super(address);
+        this.listener = listener;
+    }
+
 }
