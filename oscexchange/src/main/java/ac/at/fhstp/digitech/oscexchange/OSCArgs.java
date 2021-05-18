@@ -1,5 +1,7 @@
 package ac.at.fhstp.digitech.oscexchange;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class OSCArgs {
@@ -26,6 +28,10 @@ public class OSCArgs {
 
     public static <T> boolean hasArg(OSCArgs args, int index, Class<T> type) {
         return getArg(args, index, type).isPresent();
+    }
+
+    public static List<Object> asList(OSCArgs args) {
+        return Arrays.asList(args.args);
     }
 
 

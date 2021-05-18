@@ -21,9 +21,12 @@ public class OSCExchange {
         AsyncTask.execute(() -> runBetween(exchange, devicePair));
     }
 
-    static void fail(OSCExchange exchange, OSCError error) {
-        if (exchange.errorListener != null)
-            exchange.errorListener.handle(error);
+    static int getRequestCount(OSCExchange exchange) {
+        return exchange.requests.length;
+    }
+
+    static OSCRequest getRequest(OSCExchange exchange, int index) {
+        return exchange.requests[index];
     }
 
 
