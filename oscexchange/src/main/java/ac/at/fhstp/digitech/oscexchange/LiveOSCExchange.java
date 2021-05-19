@@ -40,7 +40,8 @@ class LiveOSCExchange {
     }
 
     private static void complete(OSCExchange exchange) {
-        exchange.completeListener.handle();
+        if (exchange.completeListener != null)
+            exchange.completeListener.handle();
     }
 
     private static Optional<OSCPortOut> tryGenerateOutPort(InetSocketAddress address) {
