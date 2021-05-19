@@ -142,16 +142,20 @@ class LiveOSCExchange {
     }
 
     private static void handleRawReceiveRequest(LiveOSCExchange live, OSCRawReceiveRequest request) {
-        handleReceiveRequest(live, request, request.listener);
+        handleReceiveRequest(live, request, args -> {
+            if (request.listener != null)
+                request.listener.handle(args);
+        });
     }
 
     private static <T> void handleParsedReceiveRequest(LiveOSCExchange live, OSCParsedReceiveRequest<T> request) {
         handleReceiveRequest(live, request, args -> {
             Optional<T> parsed = request.parser.parse(args);
 
-            if (parsed.isPresent())
-                request.listener.handle(parsed.get());
-            else
+            if (parsed.isPresent()) {
+                if (request.listener != null)
+                    request.listener.handle(parsed.get());
+            } else
                 fail(live.exchange, new OSCParsingError(args));
         });
     }
