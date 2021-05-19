@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import ac.at.fhstp.digitech.oscexchange.errors.OSCErrorListener;
 
-public class OSCExchange {
+public final class OSCExchange {
 
     public static Builder buildNew() {
         return new Builder();

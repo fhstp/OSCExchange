@@ -2,7 +2,7 @@ package ac.at.fhstp.digitech.oscexchange;
 
 import java.net.InetSocketAddress;
 
-public class OSCDevicePair {
+public final class OSCDevicePair {
 
     public final InetSocketAddress local;
     public final InetSocketAddress remote;
