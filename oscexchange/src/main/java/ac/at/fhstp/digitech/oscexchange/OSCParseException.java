@@ -3,7 +3,7 @@ package ac.at.fhstp.digitech.oscexchange;
 /**
  * An exception that occurs when invalid OSCArgs are force-parsed
  */
-public class OSCParseException extends Exception {
+public final class OSCParseException extends Exception {
 
     /**
      * The args that were attempted to parse
