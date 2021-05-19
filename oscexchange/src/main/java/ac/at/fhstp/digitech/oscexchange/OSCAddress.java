@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public final class OSCAddress {
 
-    public static Pattern pattern = Pattern.compile("^(/[a-zA-Z]+)+$");
+    public static Pattern pattern = Pattern.compile("^(/[a-zA-Z0-9]+)+$");
 
 
     public static boolean isValidOSCAddress(String value) {
