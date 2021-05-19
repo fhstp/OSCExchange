@@ -14,6 +14,11 @@ public final class OSCArgs {
         return new OSCArgs(args);
     }
 
+    public static OSCArgs list(List<Object> args) {
+        return new OSCArgs(args.toArray());
+    }
+
+
     public static int argCount(OSCArgs args) {
         return args.args.length;
     }
