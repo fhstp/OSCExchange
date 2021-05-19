@@ -4,8 +4,8 @@ import ac.at.fhstp.digitech.oscexchange.OSCArgs;
 
 public final class OSCValidationError extends OSCArgsError {
 
-    public OSCValidationError(OSCArgs args) {
-        super(args);
+    public OSCValidationError(Exception exception, OSCArgs args) {
+        super(exception, args);
     }
 
 }

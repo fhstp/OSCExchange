@@ -7,8 +7,8 @@ public abstract class OSCArgsError extends OSCError {
     public final OSCArgs args;
 
 
-    public OSCArgsError(OSCArgs args) {
+    protected OSCArgsError(Exception exception, OSCArgs args) {
+        super(exception);
         this.args = args;
     }
-
 }

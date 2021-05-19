@@ -4,8 +4,8 @@ import ac.at.fhstp.digitech.oscexchange.OSCPort;
 
 public final class OSCPortClosingError extends OSCPortError {
 
-    public OSCPortClosingError(OSCPort port) {
-        super(port);
+    public OSCPortClosingError(Exception exception, OSCPort port) {
+        super(exception, port);
     }
 
 }

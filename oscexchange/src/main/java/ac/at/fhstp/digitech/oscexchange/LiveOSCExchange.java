@@ -27,9 +27,9 @@ class LiveOSCExchange {
         Optional<OSCPortIn> inPort = tryGenerateInPort(devicePair.local);
 
         if (!outPort.isPresent())
-            fail(exchange, new OSCPortOpeningError(OSCPort.Out));
+            fail(exchange, new OSCPortOpeningError(null, OSCPort.Out));
         else if (!inPort.isPresent())
-            fail(exchange, new OSCPortOpeningError(OSCPort.In));
+            fail(exchange, new OSCPortOpeningError(null, OSCPort.In));
         else
             run(new LiveOSCExchange(exchange, outPort.get(), inPort.get()));
     }
@@ -73,14 +73,14 @@ class LiveOSCExchange {
         try {
             live.inPort.close();
         } catch (Exception e) {
-            fail(live.exchange, new OSCPortClosingError(OSCPort.In));
+            fail(live.exchange, new OSCPortClosingError(e, OSCPort.In));
             return;
         }
 
         try {
             live.outPort.close();
         } catch (Exception e) {
-            fail(live.exchange, new OSCPortClosingError(OSCPort.Out));
+            fail(live.exchange, new OSCPortClosingError(e, OSCPort.Out));
             return;
         }
 
@@ -111,9 +111,9 @@ class LiveOSCExchange {
             live.outPort.send(message);
             handleNextRequest(live);
         } catch (IOException e) {
-            fail(live.exchange, new OSCPortUseError(OSCPort.Out));
+            fail(live.exchange, new OSCPortUseError(e, OSCPort.Out));
         } catch (OSCSerializeException e) {
-            fail(live.exchange, new OSCMessageError(request.args));
+            fail(live.exchange, new OSCMessageError(e, request.args));
         }
     }
 
@@ -132,7 +132,7 @@ class LiveOSCExchange {
                     onValidated.handle(receivedArgs);
                     handleNextRequest(live);
                 } else
-                    fail(live.exchange, new OSCValidationError(receivedArgs));
+                    fail(live.exchange, new OSCValidationError(null, receivedArgs));
             else
                 handleNextRequest(live);
         };
@@ -156,7 +156,7 @@ class LiveOSCExchange {
                 if (request.listener != null)
                     request.listener.handle(parsed.get());
             } else
-                fail(live.exchange, new OSCParsingError(args));
+                fail(live.exchange, new OSCParsingError(null, args));
         });
     }
 

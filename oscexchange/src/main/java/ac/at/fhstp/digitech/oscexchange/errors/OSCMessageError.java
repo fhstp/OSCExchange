@@ -4,8 +4,8 @@ import ac.at.fhstp.digitech.oscexchange.OSCArgs;
 
 public final class OSCMessageError extends OSCArgsError {
 
-    public OSCMessageError(OSCArgs args) {
-        super(args);
+    public OSCMessageError(Exception exception, OSCArgs args) {
+        super(exception, args);
     }
 
 }

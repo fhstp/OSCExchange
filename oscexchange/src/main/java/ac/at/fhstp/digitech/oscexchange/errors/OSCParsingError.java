@@ -4,8 +4,8 @@ import ac.at.fhstp.digitech.oscexchange.OSCArgs;
 
 public final class OSCParsingError extends OSCArgsError {
 
-    public OSCParsingError(OSCArgs args) {
-        super(args);
+    public OSCParsingError(Exception exception, OSCArgs args) {
+        super(exception, args);
     }
 
 }
