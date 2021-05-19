@@ -21,7 +21,7 @@ public class OSCAddress {
     public final String value;
 
 
-    public OSCAddress(String address) {
+    private OSCAddress(String address) {
         this.value = address;
     }
 
