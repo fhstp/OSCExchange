@@ -15,6 +15,7 @@ import java.util.Optional;
 import ac.at.fhstp.digitech.oscexchange.errors.OSCError;
 import ac.at.fhstp.digitech.oscexchange.errors.OSCMessageError;
 import ac.at.fhstp.digitech.oscexchange.errors.OSCParsingError;
+import ac.at.fhstp.digitech.oscexchange.errors.OSCPortClosingError;
 import ac.at.fhstp.digitech.oscexchange.errors.OSCPortOpeningError;
 import ac.at.fhstp.digitech.oscexchange.errors.OSCPortUseError;
 import ac.at.fhstp.digitech.oscexchange.errors.OSCValidationError;
@@ -67,13 +68,31 @@ class LiveOSCExchange {
         return live.requestIndex < OSCExchange.getRequestCount(live.exchange);
     }
 
+    private static void complete(LiveOSCExchange live) {
+        try {
+            live.inPort.close();
+        } catch (Exception e) {
+            fail(live.exchange, new OSCPortClosingError(OSCPort.In));
+            return;
+        }
+
+        try {
+            live.outPort.close();
+        } catch (Exception e) {
+            fail(live.exchange, new OSCPortClosingError(OSCPort.Out));
+            return;
+        }
+
+        complete(live.exchange);
+    }
+
     private static void handleNextRequest(LiveOSCExchange live) {
         if (hasRequest(live)) {
             OSCRequest request = OSCExchange.getRequest(live.exchange, live.requestIndex);
             live.requestIndex++;
             handleRequest(live, request);
         } else
-            complete(live.exchange);
+            complete(live);
     }
 
     private static void handleRequest(LiveOSCExchange live, OSCRequest request) {
