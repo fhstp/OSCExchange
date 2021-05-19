@@ -13,7 +13,7 @@ public final class OSCAddress {
     /**
      * The pattern used to validate OSCAddresses
      */
-    public static Pattern pattern = Pattern.compile("^(/[a-zA-Z0-9]+)+$");
+    public static final Pattern pattern = Pattern.compile("^(/[a-zA-Z0-9]+)+$");
 
 
     /**
