@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class OSCArgs {
+public final class OSCArgs {
 
     public static OSCArgs single(Object arg) {
         return multiple(arg);
