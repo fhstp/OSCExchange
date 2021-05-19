@@ -124,7 +124,7 @@ class LiveOSCExchange {
             live.inPort.getDispatcher().removeListener(selector, listener.value);
             live.inPort.stopListening();
 
-            OSCArgs receivedArgs = OSCArgs.multiple(event.getMessage().getArguments());
+            OSCArgs receivedArgs = OSCArgs.list(event.getMessage().getArguments());
 
             if (request.validator != null)
                 if (request.validator.isValid(receivedArgs)) {
