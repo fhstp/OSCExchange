@@ -22,12 +22,7 @@ import ac.at.fhstp.digitech.oscexchange.errors.OSCValidationError;
 
 class LiveOSCExchange {
 
-    private static void fail(OSCExchange exchange, OSCError error) {
-        if (exchange.errorListener != null)
-            exchange.errorListener.handle(error);
-    }
-
-    public static void start(OSCExchange exchange, OSCDevicePair devicePair) {
+    static void start(OSCExchange exchange, OSCDevicePair devicePair) {
         Optional<OSCPortOut> outPort = tryGenerateOutPort(devicePair.remote);
         Optional<OSCPortIn> inPort = tryGenerateInPort(devicePair.local);
 
@@ -37,6 +32,11 @@ class LiveOSCExchange {
             fail(exchange, new OSCPortOpeningError(OSCPort.In));
         else
             run(new LiveOSCExchange(exchange, outPort.get(), inPort.get()));
+    }
+
+    private static void fail(OSCExchange exchange, OSCError error) {
+        if (exchange.errorListener != null)
+            exchange.errorListener.handle(error);
     }
 
     private static void complete(OSCExchange exchange) {
