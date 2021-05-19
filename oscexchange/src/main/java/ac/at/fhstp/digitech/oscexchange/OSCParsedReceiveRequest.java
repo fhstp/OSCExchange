@@ -12,10 +12,4 @@ final class OSCParsedReceiveRequest<T> extends OSCReceiveRequest {
         this.listener = listener;
     }
 
-    OSCParsedReceiveRequest(OSCAddress address, OSCArgsParser<T> parser, OSCParsedReceiveListener<T> listener) {
-        super(address);
-        this.parser = parser;
-        this.listener = listener;
-    }
-
 }
