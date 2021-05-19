@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 
 import java.util.ArrayList;
 
-import ac.at.fhstp.digitech.oscexchange.errors.OSCError;
 import ac.at.fhstp.digitech.oscexchange.errors.OSCErrorListener;
 
 public class OSCExchange {
@@ -54,28 +53,34 @@ public class OSCExchange {
         }
 
 
-        public void send(OSCAddress address, OSCArgs args) {
+        public Builder send(OSCAddress address, OSCArgs args) {
             requests.add(new OSCSendRequest(address, args));
+            return this;
         }
 
-        public void receive(OSCAddress address, OSCRawReceiveListener listener) {
+        public Builder receive(OSCAddress address, OSCRawReceiveListener listener) {
             requests.add(new OSCRawReceiveRequest(address, listener));
+            return this;
         }
 
-        public void receive(OSCAddress address, OSCArgsValidator validator, OSCRawReceiveListener listener) {
+        public Builder receive(OSCAddress address, OSCArgsValidator validator, OSCRawReceiveListener listener) {
             requests.add(new OSCRawReceiveRequest(address, validator, listener));
+            return this;
         }
 
-        public <T> void receive(OSCAddress address, OSCArgsParser<T> parser, OSCParsedReceiveListener<T> listener) {
+        public <T> Builder receive(OSCAddress address, OSCArgsParser<T> parser, OSCParsedReceiveListener<T> listener) {
             requests.add(new OSCParsedReceiveRequest<>(address, parser, listener));
+            return this;
         }
 
-        public <T> void receive(OSCAddress address, OSCArgsValidator validator, OSCArgsParser<T> parser, OSCParsedReceiveListener<T> listener) {
+        public <T> Builder receive(OSCAddress address, OSCArgsValidator validator, OSCArgsParser<T> parser, OSCParsedReceiveListener<T> listener) {
             requests.add(new OSCParsedReceiveRequest<>(address, validator, parser, listener));
+            return this;
         }
 
-        public void onError(OSCErrorListener errorListener) {
+        public Builder onError(OSCErrorListener errorListener) {
             this.errorListener = errorListener;
+            return this;
         }
 
         public OSCExchange onComplete(OSCExchangeCompleteListener completeListener) {
