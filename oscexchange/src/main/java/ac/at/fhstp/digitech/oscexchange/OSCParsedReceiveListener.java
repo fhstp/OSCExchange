@@ -13,6 +13,7 @@ public interface OSCParsedReceiveListener<T> {
      *
      * @param parsed The received object
      */
+    @PublicApi
     void handle(T parsed);
 
 }

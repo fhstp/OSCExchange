@@ -15,6 +15,7 @@ public final class OSCArgs {
      * @param arg The argument
      * @return The created OSCArgs
      */
+    @PublicApi
     public static OSCArgs single(Object arg) {
         return multiple(arg);
     }
@@ -25,6 +26,7 @@ public final class OSCArgs {
      * @param args The arguments
      * @return The created OSCArgs
      */
+    @PublicApi
     public static OSCArgs multiple(Object... args) {
         return new OSCArgs(args);
     }
@@ -35,6 +37,7 @@ public final class OSCArgs {
      * @param args The arguments
      * @return The created OSCArgs
      */
+    @PublicApi
     public static OSCArgs list(List<Object> args) {
         return new OSCArgs(args.toArray());
     }
@@ -45,6 +48,7 @@ public final class OSCArgs {
      * @param args The args to be counted
      * @return The number of arguments
      */
+    @PublicApi
     public static int argCount(OSCArgs args) {
         return args.args.length;
     }
@@ -58,6 +62,7 @@ public final class OSCArgs {
      * @param <T>   The type of the argument
      * @return The optional result
      */
+    @PublicApi
     public static <T> Optional<T> getArg(OSCArgs args, int index, Class<T> type) {
         if (argCount(args) > index && args.args[index].getClass() == type)
             //noinspection unchecked
@@ -75,6 +80,7 @@ public final class OSCArgs {
      * @param <T>   The type of the argument
      * @return True if the OSCArgs has the searched argument
      */
+    @PublicApi
     public static <T> boolean hasArg(OSCArgs args, int index, Class<T> type) {
         return getArg(args, index, type).isPresent();
     }

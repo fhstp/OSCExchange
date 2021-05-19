@@ -13,6 +13,7 @@ public final class OSCAddress {
     /**
      * The pattern used to validate OSCAddresses
      */
+    @PublicApi
     public static final Pattern pattern = Pattern.compile("^(/[a-zA-Z0-9]+)+$");
 
 
@@ -22,6 +23,7 @@ public final class OSCAddress {
      * @param value The string to be checked
      * @return True if the string is a valid OSCAddress
      */
+    @PublicApi
     public static boolean isValidOSCAddress(String value) {
         return value != null && pattern.matcher(value).find();
     }
@@ -32,12 +34,14 @@ public final class OSCAddress {
      * @param value The string from which to create the address
      * @return An optional address. Has a value if validation succeeded, empty otherwise
      */
+    @PublicApi
     public static Optional<OSCAddress> create(String value) {
         if (isValidOSCAddress(value)) return Optional.of(new OSCAddress(value));
         else return Optional.empty();
     }
 
 
+    @PublicApi
     public final String value;
 
 

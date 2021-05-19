@@ -9,6 +9,7 @@ public interface OSCExchangeCompleteListener {
     /**
      * Handles the completed exchange
      */
+    @PublicApi
     void handle();
 
 }

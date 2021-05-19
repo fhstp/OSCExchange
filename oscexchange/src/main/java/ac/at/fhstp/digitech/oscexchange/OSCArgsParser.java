@@ -16,6 +16,7 @@ public interface OSCArgsParser<T> {
      * @param args The OSCArgs that should be parsed
      * @return Optional parsed object. Empty if parsing was not successful
      */
+    @PublicApi
     Optional<T> parse(OSCArgs args);
 
     /**
@@ -25,6 +26,7 @@ public interface OSCArgsParser<T> {
      * @return The parsed object
      * @throws OSCParseException Thrown if parsing was not successful
      */
+    @PublicApi
     default T forceParse(OSCArgs args) throws OSCParseException {
         return parse(args).orElseThrow(() -> new OSCParseException(args));
     }

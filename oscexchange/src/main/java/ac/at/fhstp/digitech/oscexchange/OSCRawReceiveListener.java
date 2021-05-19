@@ -11,6 +11,7 @@ public interface OSCRawReceiveListener {
      *
      * @param args The received args
      */
+    @PublicApi
     void handle(OSCArgs args);
 
 }

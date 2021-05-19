@@ -12,6 +12,7 @@ public interface OSCArgsValidator {
      * @param count The number that should be checked for
      * @return The created validator
      */
+    @PublicApi
     static OSCArgsValidator hasCount(int count) {
         return args -> OSCArgs.argCount(args) == count;
     }
@@ -21,6 +22,7 @@ public interface OSCArgsValidator {
      *
      * @return The created validator
      */
+    @PublicApi
     static OSCArgsValidator isSingle() {
         return hasCount(1);
     }
@@ -32,6 +34,7 @@ public interface OSCArgsValidator {
      * @param type  The type of the argument
      * @return The created validator
      */
+    @PublicApi
     static OSCArgsValidator hasArgOfType(int index, Class<?> type) {
         return args -> OSCArgs.hasArg(args, index, type);
     }
@@ -42,6 +45,7 @@ public interface OSCArgsValidator {
      * @param type The type of the argument
      * @return The created validator
      */
+    @PublicApi
     static OSCArgsValidator isSingleOfType(Class<?> type) {
         return isSingle().and(hasArgOfType(0, type));
     }
@@ -53,6 +57,7 @@ public interface OSCArgsValidator {
      * @param args The args to check
      * @return True if the args match the validators criteria
      */
+    @PublicApi
     boolean isValid(OSCArgs args);
 
 
@@ -62,6 +67,7 @@ public interface OSCArgsValidator {
      * @param other The other validator
      * @return The combined validator
      */
+    @PublicApi
     default OSCArgsValidator and(OSCArgsValidator other) {
         return data -> this.isValid(data) && other.isValid(data);
     }
@@ -72,6 +78,7 @@ public interface OSCArgsValidator {
      * @param other The other validator
      * @return The combined validator
      */
+    @PublicApi
     default OSCArgsValidator or(OSCArgsValidator other) {
         return data -> this.isValid(data) || other.isValid(data);
     }
@@ -82,6 +89,7 @@ public interface OSCArgsValidator {
      * @param other The other validator
      * @return The combined validator
      */
+    @PublicApi
     default OSCArgsValidator butNot(OSCArgsValidator other) {
         return data -> this.isValid(data) && !other.isValid(data);
     }

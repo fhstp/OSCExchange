@@ -8,6 +8,7 @@ public final class OSCParseException extends Exception {
     /**
      * The args that were attempted to parse
      */
+    @PublicApi
     public final OSCArgs args;
 
     public OSCParseException(OSCArgs args) {

@@ -16,6 +16,7 @@ public final class OSCExchange {
      *
      * @return The new builder
      */
+    @PublicApi
     public static Builder buildNew() {
         return new Builder();
     }
@@ -26,6 +27,7 @@ public final class OSCExchange {
      * @param exchange   The exchange to run
      * @param devicePair The devices between which to run the exchange
      */
+    @PublicApi
     public static void runBetween(OSCExchange exchange, OSCDevicePair devicePair) {
         LiveOSCExchange.start(exchange, devicePair);
     }
@@ -36,10 +38,12 @@ public final class OSCExchange {
      * @param exchange   The exchange to run
      * @param devicePair The devices between which to run the exchange
      */
+    @PublicApi
     public static void runBetweenAsync(OSCExchange exchange, OSCDevicePair devicePair) {
         AsyncTask.execute(() -> runBetween(exchange, devicePair));
     }
 
+    @PublicApi
     static int getRequestCount(OSCExchange exchange) {
         return exchange.requests.length;
     }
@@ -83,6 +87,7 @@ public final class OSCExchange {
          * @param args    The arguments to send to the address
          * @return The same builder for method chaining
          */
+        @PublicApi
         public Builder send(OSCAddress address, OSCArgs args) {
             requests.add(new OSCSendRequest(address, args));
             return this;
@@ -95,6 +100,7 @@ public final class OSCExchange {
          * @param listener A listener to be called when the message arrives. Null if you need no listener
          * @return The same builder for method chaining
          */
+        @PublicApi
         public Builder receive(OSCAddress address, OSCRawReceiveListener listener) {
             return receive(address, null, listener);
         }
@@ -105,6 +111,7 @@ public final class OSCExchange {
          * @param address The address on which the expected message will arrive
          * @return The same builder for method chaining
          */
+        @PublicApi
         public Builder receive(OSCAddress address) {
             return receive(address, (OSCArgsValidator) null, null);
         }
@@ -117,6 +124,7 @@ public final class OSCExchange {
          * @param listener  A listener to be called when the message arrives. Null if you need no listener
          * @return The same builder for method chaining
          */
+        @PublicApi
         public Builder receive(OSCAddress address, OSCArgsValidator validator, OSCRawReceiveListener listener) {
             requests.add(new OSCRawReceiveRequest(address, validator, listener));
             return this;
@@ -130,6 +138,7 @@ public final class OSCExchange {
          * @param listener A listener to be called when the message arrives. Null if you need no listener
          * @return The same builder for method chaining
          */
+        @PublicApi
         public <T> Builder receive(OSCAddress address, OSCArgsParser<T> parser, OSCParsedReceiveListener<T> listener) {
             return receive(address, null, parser, listener);
         }
@@ -143,6 +152,7 @@ public final class OSCExchange {
          * @param listener  A listener to be called when the message arrives. Null if you need no listener
          * @return The same builder for method chaining
          */
+        @PublicApi
         public <T> Builder receive(OSCAddress address, OSCArgsValidator validator, OSCArgsParser<T> parser, OSCParsedReceiveListener<T> listener) {
             requests.add(new OSCParsedReceiveRequest<>(address, validator, parser, listener));
             return this;
@@ -154,6 +164,7 @@ public final class OSCExchange {
          * @param errorListener The listener to be called when an error occurs. Null if you need no listener
          * @return The same builder for method chaining
          */
+        @PublicApi
         public Builder onError(OSCErrorListener errorListener) {
             this.errorListener = errorListener;
             return this;
@@ -165,6 +176,7 @@ public final class OSCExchange {
          * @param completeListener The listener to be called when the exchange completes without error. Null if you need no listener
          * @return The same builder for method chaining
          */
+        @PublicApi
         public OSCExchange onComplete(OSCExchangeCompleteListener completeListener) {
             return new OSCExchange(requests.toArray(new OSCRequest[0]),
                                    errorListener,
