@@ -35,7 +35,7 @@ public final class OSCArgs {
         return getArg(args, index, type).isPresent();
     }
 
-    public static List<Object> asList(OSCArgs args) {
+    static List<Object> asList(OSCArgs args) {
         return Arrays.asList(args.args);
     }
 
