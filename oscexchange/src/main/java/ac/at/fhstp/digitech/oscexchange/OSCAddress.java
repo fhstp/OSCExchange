@@ -3,7 +3,7 @@ package ac.at.fhstp.digitech.oscexchange;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-public class OSCAddress {
+public final class OSCAddress {
 
     public static Pattern pattern = Pattern.compile("^(/[a-zA-Z]+)+$");
 
