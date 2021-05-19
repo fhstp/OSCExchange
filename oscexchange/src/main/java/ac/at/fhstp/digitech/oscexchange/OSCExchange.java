@@ -59,8 +59,11 @@ public final class OSCExchange {
         }
 
         public Builder receive(OSCAddress address, OSCRawReceiveListener listener) {
-            requests.add(new OSCRawReceiveRequest(address, listener));
-            return this;
+            return receive(address, null, listener);
+        }
+
+        public Builder receive(OSCAddress address) {
+            return receive(address, (OSCArgsValidator) null, null);
         }
 
         public Builder receive(OSCAddress address, OSCArgsValidator validator, OSCRawReceiveListener listener) {
@@ -69,8 +72,7 @@ public final class OSCExchange {
         }
 
         public <T> Builder receive(OSCAddress address, OSCArgsParser<T> parser, OSCParsedReceiveListener<T> listener) {
-            requests.add(new OSCParsedReceiveRequest<>(address, parser, listener));
-            return this;
+            return receive(address, null, parser, listener);
         }
 
         public <T> Builder receive(OSCAddress address, OSCArgsValidator validator, OSCArgsParser<T> parser, OSCParsedReceiveListener<T> listener) {
