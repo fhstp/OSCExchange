@@ -1,7 +1,7 @@
 package ac.at.fhstp.digitech.oscexchange;
 
 /**
- * Checks if OSCArgs match a given criterium
+ * Checks if OSCArgs match given criteria
  */
 @FunctionalInterface
 public interface OSCArgsValidator {
