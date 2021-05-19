@@ -17,7 +17,7 @@ public interface OSCArgsParser<T> {
      * @return Optional parsed object. Empty if parsing was not successful
      */
     Optional<T> parse(OSCArgs args);
-    
+
     /**
      * Attempts to parse the given OSCArgs to the parsers type
      *
