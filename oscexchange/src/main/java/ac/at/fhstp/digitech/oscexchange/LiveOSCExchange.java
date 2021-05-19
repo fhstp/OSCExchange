@@ -108,12 +108,13 @@ class LiveOSCExchange {
             OSCArgs receivedArgs = OSCArgs.multiple(event.getMessage().getArguments());
 
             if (request.validator != null)
-                if (request.validator.isValid(receivedArgs))
+                if (request.validator.isValid(receivedArgs)) {
                     onValidated.handle(receivedArgs);
-                else
+                    handleNextRequest(live);
+                } else
                     fail(live.exchange, new OSCValidationError(receivedArgs));
-
-            handleNextRequest(live);
+            else
+                handleNextRequest(live);
         };
 
         live.inPort.getDispatcher().addListener(selector, listener.value);
