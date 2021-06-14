@@ -7,6 +7,9 @@ import java.util.*
  */
 class OSCArgs private constructor(private val args: Array<Any>) {
     companion object {
+
+        val empty = list(listOf())
+
         /**
          * Creates OSCArgs from a single argument
          *
