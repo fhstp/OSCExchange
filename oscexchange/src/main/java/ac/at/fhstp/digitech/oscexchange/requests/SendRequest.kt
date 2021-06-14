@@ -13,10 +13,15 @@ data class SendRequest(
 
     companion object {
 
+        private val emptyArgsGenerator = { _: Unit -> OSCArgs.empty }
+
+        private val noSuccessHandling = { _: Unit -> }
+
+
         fun new(address: OSCAddress) =
             SendRequestBuilder(
-                address, Request.emptyArgsGenerator,
-                Request.noErrorHandling, Request.noSuccessHandling
+                address, emptyArgsGenerator,
+                Request.noErrorHandling, noSuccessHandling
             )
 
     }
