@@ -1,15 +1,13 @@
-package ac.at.fhstp.digitech.oscexchange;
+package ac.at.fhstp.digitech.oscexchange
 
-import java.util.Optional;
+import java.util.*
 
 /**
  * Parses OSCArgs to some type
  *
  * @param <T>The type to parse to
- */
-@FunctionalInterface
-public interface OSCArgsParser<T> {
-
+</T> */
+fun interface OSCArgsParser<T> {
     /**
      * Attempts to parse the given OSCArgs to the parsers type
      *
@@ -17,7 +15,7 @@ public interface OSCArgsParser<T> {
      * @return Optional parsed object. Empty if parsing was not successful
      */
     @PublicApi
-    Optional<T> parse(OSCArgs args);
+    fun parse(args: OSCArgs): Optional<T>
 
     /**
      * Attempts to parse the given OSCArgs to the parsers type
@@ -27,8 +25,8 @@ public interface OSCArgsParser<T> {
      * @throws OSCParseException Thrown if parsing was not successful
      */
     @PublicApi
-    default T forceParse(OSCArgs args) throws OSCParseException {
-        return parse(args).orElseThrow(() -> new OSCParseException(args));
+    @Throws(OSCParseException::class)
+    fun forceParse(args: OSCArgs): T {
+        return parse(args).orElseThrow { OSCParseException(args) }
     }
-
 }

@@ -1,14 +1,15 @@
-package ac.at.fhstp.digitech.oscexchange;
+package ac.at.fhstp.digitech.oscexchange
 
 /**
  * The "direction" of a port
  */
 @PublicApi
-public enum OSCPort {
+enum class OSCPort {
     /**
      * The "in" port
      */
     In,
+
     /**
      * The "our" port
      */
