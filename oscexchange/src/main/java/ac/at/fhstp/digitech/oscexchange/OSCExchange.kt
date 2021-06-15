@@ -6,7 +6,7 @@ import ac.at.fhstp.digitech.oscexchange.requests.RequestBuilder
 /**
  * Stores all information about an OSC exchange between two devices
  */
-class OSCExchange private constructor(val requests: Array<Request>) {
+class OSCExchange private constructor(internal val requests: Array<Request>) {
 
     companion object {
 
