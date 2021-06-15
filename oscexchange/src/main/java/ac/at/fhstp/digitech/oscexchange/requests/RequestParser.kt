@@ -17,7 +17,13 @@ class RequestParser<TParsed>(
         if (parsed != null)
             this.onParseSuccess(parsed)
         else
-            onError(OSCParsingException(args))
+            onError(
+                OSCParsingException(
+                    args,
+                    "Received args could not be parsed!",
+                    null
+                )
+            )
     }
 
 }

@@ -50,7 +50,13 @@ data class ReceiveRequest(
 
                     parser?.tryParse(args, onError)
                 } else
-                    onError(OSCValidationException(args))
+                    onError(
+                        OSCValidationException(
+                            args,
+                            "Received arguments did not pass validation",
+                            null
+                        )
+                    )
                 Unit
             }
 
