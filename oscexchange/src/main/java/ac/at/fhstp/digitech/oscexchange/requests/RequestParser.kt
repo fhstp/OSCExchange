@@ -8,7 +8,7 @@ class RequestParser<TParsed>(
     private val onParseSuccess: (TParsed) -> Unit
 ) {
 
-    fun tryParse(
+    internal fun tryParse(
         args: OSCArgs,
         onError: (OSCParsingError) -> Unit
     ) {
