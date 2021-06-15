@@ -149,7 +149,7 @@ internal class LiveOSCExchange private constructor(
                     handleNextRequest(live)
                 } else fail(
                     live.exchange,
-                    OSCValidationError(null, receivedArgs)
+                    OSCValidationError(receivedArgs)
                 ) else handleNextRequest(live)
             }
             live.inPort.dispatcher.addListener(selector, listener.value)
@@ -179,7 +179,7 @@ internal class LiveOSCExchange private constructor(
                     if (request.listener != null)
                         request.listener.handle(parsed.get())
                 } else
-                    fail(live.exchange, OSCParsingError(null, args))
+                    fail(live.exchange, OSCParsingError(args))
             }
         }
     }
