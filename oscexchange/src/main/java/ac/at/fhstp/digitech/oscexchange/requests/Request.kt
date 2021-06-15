@@ -2,7 +2,7 @@ package ac.at.fhstp.digitech.oscexchange.requests
 
 import ac.at.fhstp.digitech.oscexchange.errors.OSCError
 
-internal interface Request {
+interface Request {
 
     companion object {
 
