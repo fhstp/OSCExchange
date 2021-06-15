@@ -1,6 +1,6 @@
 package ac.at.fhstp.digitech.oscexchange
 
-import ac.at.fhstp.digitech.oscexchange.errors.OSCPortOpeningError
+import ac.at.fhstp.digitech.oscexchange.errors.OSCPortOpeningException
 import com.illposed.osc.transport.udp.OSCPortIn
 import com.illposed.osc.transport.udp.OSCPortOut
 import java.net.InetSocketAddress
@@ -23,7 +23,7 @@ class OSCDevicePair @PublicApi constructor(
         try {
             Result.success(OSCPortIn(local))
         } catch (e: Exception) {
-            val error = OSCPortOpeningError(
+            val error = OSCPortOpeningException(
                 OSCPort.In, "Could not open in port!", e
             )
             Result.failure(error)
@@ -33,7 +33,7 @@ class OSCDevicePair @PublicApi constructor(
         try {
             Result.success(OSCPortOut(remote))
         } catch (e: Exception) {
-            val error = OSCPortOpeningError(
+            val error = OSCPortOpeningException(
                 OSCPort.Out, "Could not open out port!", e
             )
             Result.failure(error)
