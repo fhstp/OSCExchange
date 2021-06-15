@@ -6,10 +6,8 @@ import ac.at.fhstp.digitech.oscexchange.PublicApi
 /**
  * Base-class for all errors that occur when a port cannot be used
  */
-abstract class OSCPortError(
-    exception: Exception?,
-    /**
-     * Specifies whether the in- or out-port was the problem
-     */
-    @PublicApi val port: OSCPort
-) : OSCError(exception)
+abstract class OSCPortException(
+    @PublicApi val port: OSCPort,
+    message: String,
+    inner: Throwable
+) : OSCException(message, inner)

@@ -1,7 +1,7 @@
 package ac.at.fhstp.digitech.oscexchange.requests
 
 import ac.at.fhstp.digitech.oscexchange.OSCArgs
-import ac.at.fhstp.digitech.oscexchange.errors.OSCParsingError
+import ac.at.fhstp.digitech.oscexchange.errors.OSCParsingException
 
 class RequestParser<TParsed>(
     private val parser: (OSCArgs) -> TParsed?,
@@ -10,14 +10,14 @@ class RequestParser<TParsed>(
 
     internal fun tryParse(
         args: OSCArgs,
-        onError: (OSCParsingError) -> Unit
+        onError: (OSCParsingException) -> Unit
     ) {
         val parsed = this.parser(args)
 
         if (parsed != null)
             this.onParseSuccess(parsed)
         else
-            onError(OSCParsingError(args))
+            onError(OSCParsingException(args))
     }
 
 }

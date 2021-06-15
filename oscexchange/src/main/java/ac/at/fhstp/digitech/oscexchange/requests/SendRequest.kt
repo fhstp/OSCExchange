@@ -3,12 +3,12 @@ package ac.at.fhstp.digitech.oscexchange.requests
 import ac.at.fhstp.digitech.oscexchange.OSCAddress
 import ac.at.fhstp.digitech.oscexchange.OSCArgs
 import ac.at.fhstp.digitech.oscexchange.PublicApi
-import ac.at.fhstp.digitech.oscexchange.errors.OSCError
+import ac.at.fhstp.digitech.oscexchange.errors.OSCException
 
 data class SendRequest(
     val address: OSCAddress,
     val argsGenerator: (Unit) -> OSCArgs,
-    val onError: (OSCError) -> Unit,
+    val onError: (OSCException) -> Unit,
     val onSuccess: (Unit) -> Unit
 ) : Request {
 
@@ -35,7 +35,7 @@ data class SendRequest(
     data class Builder(
         private val address: OSCAddress,
         private val argsGenerator: (Unit) -> OSCArgs,
-        private val onError: (OSCError) -> Unit,
+        private val onError: (OSCException) -> Unit,
         private val onSuccess: (Unit) -> Unit
     ) : RequestBuilder<SendRequest> {
 
@@ -51,7 +51,7 @@ data class SendRequest(
             copy(argsGenerator = argsGenerator)
 
         @PublicApi
-        fun onError(onError: (OSCError) -> Unit) =
+        fun onError(onError: (OSCException) -> Unit) =
             copy(onError = onError)
 
         @PublicApi

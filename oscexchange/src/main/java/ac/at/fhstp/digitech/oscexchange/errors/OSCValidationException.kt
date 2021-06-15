@@ -5,5 +5,8 @@ import ac.at.fhstp.digitech.oscexchange.OSCArgs
 /**
  * An error that occurs when OSCArgs fail to be validated
  */
-class OSCValidationError(args: OSCArgs) :
-    OSCArgsError(null, args)
+class OSCValidationException(
+    args: OSCArgs,
+    message: String,
+    inner: Throwable
+) : OSCArgsException(args, message, inner)

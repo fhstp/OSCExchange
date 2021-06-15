@@ -3,12 +3,12 @@ package ac.at.fhstp.digitech.oscexchange.requests
 import ac.at.fhstp.digitech.oscexchange.OSCAddress
 import ac.at.fhstp.digitech.oscexchange.OSCArgs
 import ac.at.fhstp.digitech.oscexchange.PublicApi
-import ac.at.fhstp.digitech.oscexchange.errors.OSCError
-import ac.at.fhstp.digitech.oscexchange.errors.OSCValidationError
+import ac.at.fhstp.digitech.oscexchange.errors.OSCException
+import ac.at.fhstp.digitech.oscexchange.errors.OSCValidationException
 
 data class ReceiveRequest(
     val address: OSCAddress,
-    val onError: (OSCError) -> Unit,
+    val onError: (OSCException) -> Unit,
     val onReceived: (OSCArgs) -> Unit
 ) : Request {
 
@@ -37,7 +37,7 @@ data class ReceiveRequest(
         private val onReceived: (OSCArgs) -> Unit,
         private val parser: RequestParser<*>?,
         private val validator: (OSCArgs) -> Boolean,
-        private val onError: (OSCError) -> Unit
+        private val onError: (OSCException) -> Unit
     ) : RequestBuilder<ReceiveRequest> {
 
         override fun build(): ReceiveRequest =
@@ -50,7 +50,7 @@ data class ReceiveRequest(
 
                     parser?.tryParse(args, onError)
                 } else
-                    onError(OSCValidationError(args))
+                    onError(OSCValidationException(args))
                 Unit
             }
 
@@ -74,7 +74,7 @@ data class ReceiveRequest(
             copy(validator = validator)
 
         @PublicApi
-        fun onError(onError: (OSCError) -> Unit) =
+        fun onError(onError: (OSCException) -> Unit) =
             copy(onError = onError)
 
     }
