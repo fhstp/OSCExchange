@@ -26,6 +26,10 @@ data class SendRequest(
                 Request.noErrorHandling, noSuccessHandling
             )
 
+        @PublicApi
+        fun new(address: String) =
+            new(OSCAddress.create(address).get())
+
     }
 
     data class Builder(
