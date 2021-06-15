@@ -78,7 +78,7 @@ class RunnableOSCExchange(
             inPort.dispatcher.removeListener(selector, listener.value)
             inPort.stopListening()
 
-            val args = OSCArgs.list(it.message.arguments)
+            val args = OSCArgs.ofList(it.message.arguments)
             request.onReceived(args)
 
             // TODO: Allow config to only continue if no errors occurred

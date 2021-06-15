@@ -37,7 +37,7 @@ data class SendRequest(
 
 
     internal fun buildOSCMessage(args: OSCArgs) =
-        OSCMessage(address.value, OSCArgs.asList(args))
+        OSCMessage(address.value, args.asList())
 
 
     data class Builder(

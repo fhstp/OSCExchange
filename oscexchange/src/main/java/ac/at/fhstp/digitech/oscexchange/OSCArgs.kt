@@ -6,9 +6,10 @@ import java.util.*
  * Stores arguments that can be sent or received over OSC
  */
 class OSCArgs private constructor(private val args: Array<Any>) {
+
     companion object {
 
-        val empty = list(listOf())
+        val empty = ofList(listOf())
 
         /**
          * Creates OSCArgs from a single argument
@@ -39,53 +40,52 @@ class OSCArgs private constructor(private val args: Array<Any>) {
          * @return The created OSCArgs
          */
         @PublicApi
-        fun list(args: List<Any>): OSCArgs {
+        fun ofList(args: List<Any>): OSCArgs {
             return OSCArgs(args.toTypedArray())
         }
-
-        /**
-         * Counts the number of arguments in the given OSCArgs
-         *
-         * @param args The args to be counted
-         * @return The number of arguments
-         */
-        @PublicApi
-        fun argCount(args: OSCArgs): Int {
-            return args.args.size
-        }
-
-        /**
-         * Tries to get an argument of a specific type from a specific index. If no such argument is found, an empty Optional is returned
-         *
-         * @param args  The OSCArgs from which to get the argument
-         * @param index The index of the argument
-         * @param type  The class of the argument
-         * @param <T>   The type of the argument
-         * @return The optional result
-        </T> */
-        @PublicApi
-        fun <T> getArg(args: OSCArgs, index: Int, type: Class<T>): Optional<T> {
-            return if (argCount(args) > index && args.args[index].javaClass == type)
-                Optional.of(args.args[index] as T)
-            else Optional.empty()
-        }
-
-        /**
-         * Checks if the OSCArgs has an argument of a specific type from a specific index
-         *
-         * @param args  The OSCArgs from which to get the argument
-         * @param index The index of the argument
-         * @param type  The class of the argument
-         * @param <T>   The type of the argument
-         * @return True if the OSCArgs has the searched argument
-        </T> */
-        @PublicApi
-        fun <T> hasArg(args: OSCArgs, index: Int, type: Class<T>): Boolean {
-            return getArg(args, index, type).isPresent
-        }
-
-        fun asList(args: OSCArgs): List<Any> {
-            return listOf(args.args)
-        }
     }
+
+    /**
+     * Counts the number of arguments in the given OSCArgs
+     *
+     * @return The number of arguments
+     */
+    @PublicApi
+    fun argCount(): Int =
+        args.size
+
+    fun getArg(index: Int) =
+        if (argCount() > index) Optional.of(args[index])
+        else Optional.empty()
+
+    /**
+     * Tries to get an argument of a specific type from a specific index. If no such argument is found, an empty Optional is returned
+     *
+     * @param index The index of the argument
+     * @param <T>   The type of the argument
+     * @return The optional result
+    </T> */
+    @PublicApi
+    inline fun <reified T> tryGetArgOfType(index: Int): Optional<T> =
+        getArg(index)
+            .flatMap {
+                if (it is T) Optional.of(it)
+                else Optional.empty()
+            }
+
+    /**
+     * Checks if the OSCArgs has an argument of a specific type from a specific index
+     *
+     * @param index The index of the argument
+     * @param <T>   The type of the argument
+     * @return True if the OSCArgs has the searched argument
+    </T> */
+    @PublicApi
+    inline fun <reified T> hasArgOfType(index: Int): Boolean =
+        tryGetArgOfType<T>(index).isPresent
+
+    @PublicApi
+    fun asList() =
+        listOf(args)
+
 }
