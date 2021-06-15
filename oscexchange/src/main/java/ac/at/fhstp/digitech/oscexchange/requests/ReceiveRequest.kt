@@ -63,7 +63,7 @@ data class ReceiveRequest(
             parser: (OSCArgs) -> T?,
             onParseSuccess: (T) -> Unit
         ) =
-            withParser(parser = RequestParser(parser, onParseSuccess))
+            withParser(RequestParser(parser, onParseSuccess))
 
         @PublicApi
         fun withParser(parser: RequestParser<*>) =
