@@ -2,6 +2,7 @@ package ac.at.fhstp.digitech.oscexchange.requests
 
 import ac.at.fhstp.digitech.oscexchange.OSCAddress
 import ac.at.fhstp.digitech.oscexchange.OSCArgs
+import ac.at.fhstp.digitech.oscexchange.PublicApi
 import ac.at.fhstp.digitech.oscexchange.errors.OSCError
 
 data class SendRequest(
@@ -18,6 +19,7 @@ data class SendRequest(
         private val noSuccessHandling = { _: Unit -> }
 
 
+        @PublicApi
         fun new(address: OSCAddress) =
             SendRequestBuilder(
                 address, emptyArgsGenerator,
@@ -38,15 +40,19 @@ data class SendRequestBuilder(
     override fun build() =
         SendRequest(address, argsGenerator, onError, onSuccess)
 
+    @PublicApi
     fun withArgs(args: OSCArgs) =
         withArgsGenerator(argsGenerator = { args })
 
+    @PublicApi
     fun withArgsGenerator(argsGenerator: (Unit) -> OSCArgs) =
         copy(argsGenerator = argsGenerator)
 
+    @PublicApi
     fun onError(onError: (OSCError) -> Unit) =
         copy(onError = onError)
 
+    @PublicApi
     fun onSuccess(onSuccess: (Unit) -> Unit) =
         copy(onSuccess = onSuccess)
 

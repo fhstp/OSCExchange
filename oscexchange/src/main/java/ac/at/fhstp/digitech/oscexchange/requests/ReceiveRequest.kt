@@ -2,6 +2,7 @@ package ac.at.fhstp.digitech.oscexchange.requests
 
 import ac.at.fhstp.digitech.oscexchange.OSCAddress
 import ac.at.fhstp.digitech.oscexchange.OSCArgs
+import ac.at.fhstp.digitech.oscexchange.PublicApi
 import ac.at.fhstp.digitech.oscexchange.errors.OSCError
 import ac.at.fhstp.digitech.oscexchange.errors.OSCValidationError
 
@@ -18,6 +19,7 @@ data class ReceiveRequest(
         private val noValidation = { _: OSCArgs -> true }
 
 
+        @PublicApi
         fun new(address: OSCAddress) =
             ReceiveRequestBuilder(
                 address, noReceiveHandling, null,
@@ -49,22 +51,27 @@ data class ReceiveRequestBuilder(
                 onError(OSCValidationError(args))
             Unit
         }
-    
+
+    @PublicApi
     fun onReceive(onReceived: (OSCArgs) -> Unit) =
         copy(onReceived = onReceived)
 
+    @PublicApi
     fun <T> withParser(
         parser: (OSCArgs) -> T?,
         onParseSuccess: (T) -> Unit
     ) =
         withParser(parser = RequestParser(parser, onParseSuccess))
 
+    @PublicApi
     fun withParser(parser: RequestParser<*>) =
         copy(parser = parser)
 
+    @PublicApi
     fun withValidator(validator: (OSCArgs) -> Boolean) =
         copy(validator = validator)
 
+    @PublicApi
     fun onError(onError: (OSCError) -> Unit) =
         copy(onError = onError)
 
