@@ -35,7 +35,7 @@ class OSCExchange private constructor(val requests: Array<Request>) {
             )
         )
     }
-    
+
 
     data class Builder(private val requests: List<Request>) {
 
