@@ -18,6 +18,7 @@ class RunnableOSCExchange(
     private val outPort: OSCPortOut
 ) {
 
+    @PublicApi
     fun run() {
         runRequestAtIndex(0)
     }
