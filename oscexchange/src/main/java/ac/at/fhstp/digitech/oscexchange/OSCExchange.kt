@@ -17,6 +17,25 @@ class OSCExchange private constructor(val requests: Array<Request>) {
     }
 
 
+    fun tryMakeRunnable(devicePair: OSCDevicePair): Result<RunnableOSCExchange> {
+        val inPortRes = devicePair.tryOpenInPort()
+        if (inPortRes.isFailure)
+            return Result.failure(inPortRes.exceptionOrNull()!!)
+
+        val outPortRes = devicePair.tryOpenOutPort()
+        if (outPortRes.isFailure)
+            return Result.failure(outPortRes.exceptionOrNull()!!)
+
+        return Result.success(
+            RunnableOSCExchange(
+                this,
+                inPortRes.getOrNull()!!,
+                outPortRes.getOrNull()!!
+            )
+        )
+    }
+    
+
     data class Builder(private val requests: List<Request>) {
 
         @PublicApi
