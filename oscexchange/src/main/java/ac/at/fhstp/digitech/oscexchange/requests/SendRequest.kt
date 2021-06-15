@@ -5,6 +5,7 @@ import ac.at.fhstp.digitech.oscexchange.OSCArgs
 import ac.at.fhstp.digitech.oscexchange.PublicApi
 import ac.at.fhstp.digitech.oscexchange.errors.OSCException
 import com.illposed.osc.OSCMessage
+import java.util.*
 
 data class SendRequest(
     val address: OSCAddress,
@@ -28,8 +29,9 @@ data class SendRequest(
             )
 
         @PublicApi
-        fun new(address: String) =
-            new(OSCAddress.create(address).get())
+        fun new(address: String): Optional<Builder> =
+            OSCAddress.tryCreate(address)
+                .map { new(it) }
 
     }
 

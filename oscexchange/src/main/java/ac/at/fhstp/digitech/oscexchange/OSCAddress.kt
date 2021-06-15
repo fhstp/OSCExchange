@@ -6,7 +6,7 @@ import java.util.regex.Pattern
 /**
  * Stores an OSC-address, such as "/my/osc/address"
  *
- * @see OSCAddress.create
+ * @see OSCAddress.tryCreate
  */
 class OSCAddress private constructor(@PublicApi val value: String?) {
     companion object {
@@ -34,9 +34,13 @@ class OSCAddress private constructor(@PublicApi val value: String?) {
          * @return An optional address. Has a value if validation succeeded, empty otherwise
          */
         @PublicApi
-        fun create(value: String): Optional<OSCAddress> {
+        fun tryCreate(value: String): Optional<OSCAddress> {
             return if (isValidOSCAddress(value)) Optional.of(OSCAddress(value))
             else Optional.empty()
         }
+
+        @PublicApi
+        fun create(value: String) =
+            tryCreate(value).get()
     }
 }
