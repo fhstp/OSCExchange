@@ -29,7 +29,7 @@ class OSCExchange private constructor(internal val requests: Array<Request>) {
 
         return Result.success(
             RunnableOSCExchange(
-                this,
+                requests,
                 inPortRes.getOrNull()!!,
                 outPortRes.getOrNull()!!
             )

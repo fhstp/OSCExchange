@@ -84,8 +84,8 @@ class OSCArgs private constructor(private val args: Array<Any>) {
             return getArg(args, index, type).isPresent
         }
 
-        fun asList(args: OSCArgs): List<Any?> {
-            return listOf(*args.args)
+        fun asList(args: OSCArgs): List<Any> {
+            return listOf(args.args)
         }
     }
 }
