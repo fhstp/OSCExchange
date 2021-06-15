@@ -9,5 +9,5 @@ import ac.at.fhstp.digitech.oscexchange.PublicApi
 abstract class OSCPortException(
     @PublicApi val port: OSCPort,
     message: String,
-    inner: Throwable
+    inner: Throwable?
 ) : OSCException(message, inner)

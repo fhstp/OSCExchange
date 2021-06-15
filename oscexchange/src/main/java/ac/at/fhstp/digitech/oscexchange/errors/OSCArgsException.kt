@@ -9,5 +9,5 @@ import ac.at.fhstp.digitech.oscexchange.PublicApi
 abstract class OSCArgsException protected constructor(
     @PublicApi val args: OSCArgs,
     message: String,
-    inner: Throwable
+    inner: Throwable?
 ) : OSCException(message, inner)

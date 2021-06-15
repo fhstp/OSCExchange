@@ -8,5 +8,5 @@ import ac.at.fhstp.digitech.oscexchange.OSCPort
 class OSCPortOpeningError(
     port: OSCPort,
     message: String,
-    inner: Throwable
+    inner: Throwable?
 ) : OSCPortException(port, message, inner)

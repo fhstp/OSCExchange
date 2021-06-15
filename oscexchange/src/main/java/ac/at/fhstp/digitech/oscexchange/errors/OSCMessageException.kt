@@ -8,5 +8,5 @@ import ac.at.fhstp.digitech.oscexchange.OSCArgs
 class OSCMessageException(
     args: OSCArgs,
     message: String,
-    inner: Throwable
+    inner: Throwable?
 ) : OSCArgsException(args, message, inner)
