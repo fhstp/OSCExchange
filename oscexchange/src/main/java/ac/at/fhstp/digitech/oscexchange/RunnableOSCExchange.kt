@@ -10,6 +10,8 @@ import com.illposed.osc.OSCSerializeException
 import com.illposed.osc.messageselector.OSCPatternAddressMessageSelector
 import com.illposed.osc.transport.udp.OSCPortIn
 import com.illposed.osc.transport.udp.OSCPortOut
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.IOException
 
 class RunnableOSCExchange(
@@ -19,8 +21,10 @@ class RunnableOSCExchange(
 ) {
 
     @PublicApi
-    fun run() {
-        runRequestAtIndex(0)
+    suspend fun run() {
+        return withContext(Dispatchers.IO) {
+            runRequestAtIndex(0)
+        }
     }
 
     private fun runRequestAtIndex(index: Int) {
