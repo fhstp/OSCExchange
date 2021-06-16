@@ -8,21 +8,19 @@ data class SendRequest(
     val address: OSCAddress,
     val argsGenerator: () -> OSCArgs,
     val onError: ErrorHandler,
-    val onSuccess: () -> Unit
+    val onSuccess: SuccessHandler
 ) : Request {
 
     companion object {
 
         private val emptyArgsGenerator = { OSCArgs.empty }
 
-        private val noSuccessHandling = { }
-
 
         @PublicApi
         fun new(address: OSCAddress) =
             Builder(
                 address, emptyArgsGenerator,
-                ErrorHandlers.noErrorHandling, noSuccessHandling
+                ErrorHandlers.noErrorHandling, SuccessHandlers.noSuccessHandling
             )
 
         @PublicApi
@@ -41,7 +39,7 @@ data class SendRequest(
         private val address: OSCAddress,
         private val argsGenerator: () -> OSCArgs,
         private val onError: ErrorHandler,
-        private val onSuccess: () -> Unit
+        private val onSuccess: SuccessHandler
     ) : RequestBuilder<SendRequest> {
 
         override fun build() =
@@ -60,7 +58,7 @@ data class SendRequest(
             copy(onError = onError)
 
         @PublicApi
-        fun onSuccess(onSuccess: () -> Unit) =
+        fun onSuccess(onSuccess: SuccessHandler) =
             copy(onSuccess = onSuccess)
 
     }
