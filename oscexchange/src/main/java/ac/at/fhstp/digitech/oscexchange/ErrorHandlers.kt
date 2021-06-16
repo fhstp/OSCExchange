@@ -16,12 +16,14 @@ object ErrorHandlers {
     /**
      * An error handler that does nothing
      */
+    @PublicApi
     val noErrorHandling: ErrorHandler =
         {}
 
     /**
      * An error handler that prints the error to System.out
      */
+    @PublicApi
     val print: ErrorHandler =
         { error -> println(error.message) }
 
@@ -32,6 +34,7 @@ object ErrorHandlers {
      * @param tag The tag under which to log the message
      * @return The created error handler
      */
+    @PublicApi
     fun log(tag: String): ErrorHandler =
         { error -> Log.e(tag, error.message, error.cause) }
 
