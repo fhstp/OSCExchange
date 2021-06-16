@@ -15,6 +15,7 @@ object SuccessHandlers {
     /**
      * Does nothing
      */
+    @PublicApi
     val noSuccessHandling: SuccessHandler =
         {}
 
@@ -25,6 +26,7 @@ object SuccessHandlers {
      * @param message The message to print
      * @return The created success handler
      */
+    @PublicApi
     fun print(message: String): SuccessHandler =
         { println(message) }
 
@@ -35,6 +37,7 @@ object SuccessHandlers {
      * @param message The message that should be printed
      * @return The created success handler
      */
+    @PublicApi
     fun log(tag: String, message: String): SuccessHandler =
         { Log.i(tag, message) }
 
