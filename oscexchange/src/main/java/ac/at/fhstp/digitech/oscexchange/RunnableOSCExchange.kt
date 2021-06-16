@@ -15,12 +15,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException
 
+/**
+ * An OSCExchange that can be run
+ */
 class RunnableOSCExchange(
     private val requests: Array<Request>,
     private val inPort: OSCPortIn,
     private val outPort: OSCPortOut
 ) {
 
+    /**
+     * Runs the exchange
+     */
     @PublicApi
     suspend fun run() {
         return withContext(Dispatchers.IO) {
