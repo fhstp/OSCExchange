@@ -1,8 +1,6 @@
 package ac.at.fhstp.digitech.oscexchange.requests
 
-import ac.at.fhstp.digitech.oscexchange.OSCAddress
-import ac.at.fhstp.digitech.oscexchange.OSCArgs
-import ac.at.fhstp.digitech.oscexchange.PublicApi
+import ac.at.fhstp.digitech.oscexchange.*
 import ac.at.fhstp.digitech.oscexchange.errors.OSCException
 import ac.at.fhstp.digitech.oscexchange.errors.OSCValidationException
 import java.util.*
@@ -17,14 +15,11 @@ data class ReceiveRequest(
 
         private val noReceiveHandling = { _: OSCArgs -> }
 
-        private val noValidation = { _: OSCArgs -> true }
-
-
         @PublicApi
         fun new(address: OSCAddress) =
             Builder(
                 address, noReceiveHandling, null,
-                noValidation, Request.noErrorHandling
+                Validators.noValidation, Request.noErrorHandling
             )
 
         @PublicApi
@@ -38,7 +33,7 @@ data class ReceiveRequest(
         private val address: OSCAddress,
         private val onReceived: (OSCArgs) -> Unit,
         private val parser: RequestParser<*>?,
-        private val validator: (OSCArgs) -> Boolean,
+        private val validator: Validator,
         private val onError: (OSCException) -> Unit
     ) : RequestBuilder<ReceiveRequest> {
 
