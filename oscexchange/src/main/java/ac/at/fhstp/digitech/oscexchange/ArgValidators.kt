@@ -2,7 +2,7 @@ package ac.at.fhstp.digitech.oscexchange
 
 typealias ArgValidator = (OSCArgs) -> Boolean
 
-object Validators {
+object ArgValidators {
 
     @PublicApi
     val noValidation: ArgValidator =

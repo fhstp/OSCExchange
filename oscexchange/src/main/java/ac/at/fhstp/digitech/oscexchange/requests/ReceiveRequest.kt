@@ -18,7 +18,7 @@ data class ReceiveRequest(
         fun new(address: OSCAddress) =
             Builder(
                 address, noReceiveHandling, null,
-                Validators.noValidation, ErrorHandlers.noErrorHandling
+                ArgValidators.noValidation, ErrorHandlers.noErrorHandling
             )
 
         @PublicApi
