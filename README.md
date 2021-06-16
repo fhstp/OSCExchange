@@ -1,6 +1,7 @@
 # OSCExchange
 
-This a Kotlin library for easily getting started with OSC in your Android project.
+This a Kotlin library for easily getting started with OSC in your Android
+project.
 
 First define the devices addresses
 
