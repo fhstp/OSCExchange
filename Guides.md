@@ -7,27 +7,19 @@ not be repeated here.
 ## Sending multiple objects
 
 You can use the `OSCArgs.multiple` method to create arguments from multiple
-objects.
+objects. You can also use `OSCArgs.fromList` to achieve the same thing from a
+list.
 
 ## Parsing
 
-The `.receive` method can also use a `OSCArgsParser` to parse the incoming data
-to a different object-type.
+The builder for `ReceiveRequests` can also use parsing to convert the
+received `OSCArgs` to some other type.
 
 For example, say you have a custom class called `Instrument` which looks like
 this:
 
 ```
-public class Instrument {
-
-    public final String name;
-    
-    public Instrument(String name)
-    {
-        this.name = name;
-    }
-
-}
+public data class Instrument(val name: String)
 ```
 
 If you want to convert an incoming `OSCArgs` object to an instance
@@ -39,33 +31,33 @@ converted to your type_
 You can write a parser using a lambda expression:
 
 ```
-OSCArgsParser<Instrument> instrumentParser =
+val instrumentParser =
     args -> {
         ...
     }
 ```
 
 This method can do whatever you want it to, as long as it returns
-an `Optional<Instrument>`. Return a value if the parsing was a success and empty
-if it was not. In our case, the parser could look like this.
+an `Instrument?`. Return a value if the parsing was a success and null if it was
+not. In our case, the parser could look like this.
 
 ```
-OSCArgsParser<Instrument> instrumentParser =
+val instrumentParser =
     args -> {
-        Optional<String> name = OSCArgs.getArg(args, 0, String.class);
+        val name = args.tryGetArgOfType<String>(0)
         
-        if(name.isPresent())
-            return Optional.of(new Instrument(name.get()));
-        else
-            return Optional.empty();
+        if(name.isPresent()) Instrument(name.get())
+        else null
     }
 ```
 
-If parsing fails (empty is returned), then the whole exchange fails with
-an `OSCParsingError`.
+If parsing fails (null is returned), then the request fails with
+an `OSCParsingException`.
 
-If you choose to use parsing, the receive-listener that is passed to
-the `receive` method also changes, to use an instance of your class instead
-of `OSCArgs`. So in our case, this would be:
+If you choose to use parsing, you should also pass a method to receive the newly
+parsed object, like this:
 
-```.receive(address, instrumentParser, instrument -> { /* Do something */ });```
+```
+ReceiveRequest.new(address)
+              .withParser(instrumentParser, { instrument -> })
+ ```
