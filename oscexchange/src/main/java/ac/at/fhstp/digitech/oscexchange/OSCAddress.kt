@@ -28,7 +28,7 @@ class OSCAddress private constructor(@PublicApi val value: String?) {
         }
 
         /**
-         * Creates an OSCAddress
+         * Ties to create an OSCAddress
          *
          * @param value The string from which to create the address
          * @return An optional address. Has a value if validation succeeded, empty otherwise
@@ -39,6 +39,12 @@ class OSCAddress private constructor(@PublicApi val value: String?) {
             else Optional.empty()
         }
 
+        /**
+         * Tries to create an OSCAddress. Throws an exception if not successful
+         *
+         * @param value The string from which to create the address
+         * @return The created address
+         */
         @PublicApi
         fun create(value: String) =
             tryCreate(value).get()
