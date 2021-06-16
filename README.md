@@ -1,6 +1,6 @@
 # OSCExchange
 
-This a library for easily getting started with OSC in your Android project.
+This a Kotlin library for easily getting started with OSC in your Android project.
 
 First define the devices addresses
 
@@ -9,22 +9,22 @@ First define the devices addresses
 Next plan the exchange you want to have between the devices
 
 ```
-OSCExchange exchange = OSCExchange.buildNew()
-                                  .send(sendAddress, OSCArgs.single("Hello"))
-                                  .receive(responseAddress, receivedArgs -> {
-                                      // Handle response
-                                  })
-                                  .onError(error -> {
-                                      // Handle error
-                                  })
-                                  .onComplete(() -> {
-                                      // Handle exchange completion
-                                  });
+val exchange = OSCExchange.new()
+                    .add(SendRequest.new(sendAddress)
+                            .withArgs(OSCArgs.single("Hello"))
+                            .onError { error -> /* Handle error */ })
+                    .build()
 ```
 
 Finally, run the exchange asynchronously between your devices
 
-```OSCExchange.runBetweenAsync(exchange, pair);```
+```
+
+exchange.tryMakeRunnable(devicePair)
+    .onSuccess { it.run() }
+    .onFailure { /* Handle failure */ }
+
+```
 
 ## Getting started
 
