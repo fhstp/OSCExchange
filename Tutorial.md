@@ -27,59 +27,59 @@ sending the first message and `/ping/b` for the response.
 Lets create variables for these addresses.
 
 ```
-OSCAddress pingA = OSCAddress.create("/ping/A").get();
-OSCAddress pingB = OSCAddress.create("/ping/B").get();
+OSCAddress pingA = OSCAddress.create("/ping/A");
+OSCAddress pingB = OSCAddress.create("/ping/B");
 ```
 
-Note that the `OSCAddress.create` method returns an `Optional<OSCAddress>`.This
-is because it first checks if the given string is a valid address, and if it is
-not, it returns empty. We use `.get()` in this case, because we know that our
-chosen addresses are valid, but usually you would want to check first if a value
-is present.
+Note that the `OSCAddress.create` method will throw an exception if the given
+String is not a valid OSC-address.
 
 ### Building the exchange
 
-We use the `OSCExchange.buildNew()` method to start building an exchange. We
-then use the `send` and `receive` methods to create our request-chain. Finally,
-we use the `onComplete` method to create our exchange. Don`t worry, everything
-will be explained further down.
+We use the `OSCExchange.new()` method to start building an exchange. We then use
+the `addRequest` method to create our request-chain. Finally, we use the `build`
+method to create our exchange. Don`t worry, everything will be explained further
+down.
 
 ```
-OSCExchange exchange = OSCExchange.buildNew()
-                       .send(pingA, null)
-                       .receive(pingB, null)
-                       .onComplete(null);
+val exchange = OSCExchange.new()
+               .addRequest(SendRequest.new(pingA))
+               .addRequest(ReceiveRequest.new(pingB))
+               .build();
 ```
 
-Notice all the `nulls` in this request. We need to fill those in for it to work.
-Lets go bit by bit.
+This is the absolute minimum exchange, but we can spice it up quite a bit to
+make it more suited to our needs.
 
 #### Sending data
 
-The first method we used is the `send` method, which says that the first step of
-this exchange is to send some data to the remote. In our case, we would like to
-send the number 1. Right now, we are sending `null`, so lets change that. To
-send a single value, we can use the `OSCArgs.single` method.
+The first request in our exchange is a `SendRequest` to the `pingA` address. In
+our case, we would like to send the number 1. Right now, we are sending nothing,
+so lets change that. To send a single value, we can use the `.withArgs()`
+method. To create `OSCArgs`for a single value we can use `OSCArgs.single`
 
 Our new line should look like this:
 
-```.send(pingA, OSCArgs.single(1))```
+```
+.addRequest(SendRequest.new(pingA)
+                    .withArgs(OSCArgs.single(1))
+    )
+```
 
 This will send the number 1 to the given address, and once its done, move on to
 the next request.
 
 #### Receiving data
 
-To receive data, we use the `receive` method, which has multiple overloads
-depending if you want to do validation and parsing. For this example, we are
-only interested in validation, as we want to check, if we receive the correct
-number.
+To receive data, we use the `ReceiveRequest` class, which also supports
+validation and parsing. For this example, we are only interested in validation,
+as we want to check, if we receive the correct number.
 
-Before we do that though, we need to replace that `null`. In this case it is the
-listener for when a message is received. We can pass a lambda expression to
-execute when data is received.
+Before we do that though, we should add a receive listener, so when can notified
+when data was received and passed validation. We can do this by adding the
+following line to our `ReceiveRequest` builder.
 
-```.receive(pingB, args -> { /* Do something */ })```
+```.onReceive { args -> /* Handle success */ }```
 
 Note, that the `args` object is another instance of `OSCArgs`. We will look into
 how they can be interacted with later.
@@ -87,87 +87,87 @@ how they can be interacted with later.
 In our case, we want to print to the console if we receive data, so our handler
 could look like this:
 
-```.receive(pingB, args -> System.out.println("Success")```
+```.onReceive { args -> System.out.println("Success") }```
 
 The exchange will wait on this request until data was successfully received and
 only then move on to the next request.
 
 #### Adding validation
 
-To make validate received messages, we must add a validator to our `receive`
-method.
+To make validate received messages, we must add a validator to
+our `ReceiveRequest` builder.
 
-There are a few prebuilt validators, such as `OSCValidator.single` which checks
-if only a single value was received. This seems fitting for us, since we expect
-a single integer, so our validator would look like this.
+There are a few prebuilt validators, such as `ArgsValidators.hasSingleArg` which
+checks if only a single value was received. This seems fitting for us, since we
+expect a single integer, so our validator would look like this.
 
-```OSCValidator responseValidator = OSCValidator.isSingle();```
+```val responseValidator = ArgValidators.hasSingleArg```
 
 However, we also want to check if that value is an integer and specifically 2.
 Using the `and` method, we can chain validators and we can use a lambda
 expression to define our own validator. Let's do this now.
 
 ```
-OSCValidator responseValidator = OSCValidator.isSingle()
-                                             .and(args -> {
-                                                Optional<Integer> i = OSCArgs.getArg(args, 0, Integer.class);                                      
-                                                return i.isPresent() && i.get() == 2;
-                                             });
+
+val responseValidator = ArgValidators.hasSingleArg
+                                     .and { args ->
+                                        val i = args.tryGetArgOfType<Int>(0)
+                                        i.isPresent() && i.get() == 2
+                                    }
 ```
 
-In this method we use the `OSCArgs.getArg` method to get the first value as an
+In this method we use the `tryGetArgOfType` method to get the first value as an
 integer. Note that this returns an Option, in case the value is either not there
 or not an integer. We then check, if the value is present and if it is equal to
 2 or not.
 
-We can finally pass this validator to our receive method.
+We can finally pass this validator to our `ReceiveRequest` builder.
 
-```.receive(pingB, responseValidator, args -> System.out.println("Success"))```
+```.withValidator(responseValidator)```
 
 Our validator will now be called once data is received. If the data passes the
 validator, it will be forwarded to our receive-listener. If it does not pass,
-an `OSCValidationError` occurs.
+an `OSCValidationException` occurs.
 
 #### Handling errors
 
-In order to handle any errors that occur during the exchange, we can add
-an `onError` method call to our exchange. I like to add this call, before
-the `onComplete` call.
+In order to handle errors that occur during the exchange, we can add
+an `onError` listener to any requests where we expect errors. So for example, to
+check for errors in our `SendRequest` the could do something like this:
 
 ```
-...
-.onError(null)
-.onComplete(null);
+.addRequest(SendRequest.new(pingA)
+                    .withArgs(OSCArgs.single(1))
+                    .onError { error -> /* Handle error */ }
+    )
 ```
 
-Once again, we need to fill in the `null`. In this case, it expects an error
-listener, which we can specify using a lambda expression.
-
-```.onError(error -> { /* Handle error */ })```
-
-The `error` object is an instance of `OSCError` or one of its subclasses. Its
-like an exception, even though is does not inherit from it.
+The `error` object is an instance of `OSCException` or one of its subclasses.
 
 In our case we want to print "No success", so our line would look like this:
 
-```.onError(error -> System.out.println("No success"))```
+```.onError { error -> System.out.println("No success") }```
 
 #### Completing the exchange
 
-The final call is to `onComplete` and this method takes a listener, that will be
-called once the whole exchanges completes without any errors. In our case, we do
-not care about this callback, so we'll just leave it as `null`.
+The final call is to `build()` and this method will finally create
+an `OSCExchange` object.
 
 ### Running the exchange
 
 Our finished exchange should now look like this
 
 ```
-OSCExchange exchange = OSCExchange.buildNew()
-                       .send(pingA, OSCArgs.single(1))
-                       .receive(pingB, responseValidator, args -> System.out.println("Success"))
-                       .onError(error -> System.out.println("No success"))
-                       .onComplete(null);
+val exchange = OSCExchange.new()
+               .addRequest(SendRequest.new(pingA)
+                    .withArgs(OSCArgs.single(1))
+                    .onError { error -> System.out.println("No success") }
+                )
+               .addRequest(ReceiveRequest.new(pingB)
+                    .withValidator(responseValidator)
+                    .onReceive { args -> System.out.println("Success") }
+               )
+               .build();
 ```
 
 To run our exchange, we first need to specify the addresses of the machines we
@@ -183,11 +183,23 @@ InetSocketAddress remote = new InetSocketAddress(remoteIp, remotePort);
 OSCDevicePair pair = new OSCDevicePair(local, remote);
 ```
 
-We can then use this pair to run our exchange. As this will of course use the
-network, it is best to run the exchange on a background thread. You can do this
-easily using:
+We can then use this pair to run our exchange. For this we must first make our
+exchange runnable, which means opening the specified ports. We can do this using
+the following procedure:
 
-```OSCExchange.runAsyncBetween(exchange, pair);```
+```
+exchange.tryMakeRunnable(pair)
+    .onSuccess { }
+    .onFailure { }
+```
 
-And that's it. You exchange should now be running and your callbacks be called.
-For more information, read the JavaDocs included in the project.
+As you can see, the result of the `tryMakeRunnable` method is a `Result` object.
+We can use it to handle both the success and failure cases when trying to open
+the ports. If the ports were opened successfully we can then finally run the
+exchange:
+
+```.onSuccess { it.run() }```
+
+Note that the `run` method is a coroutine, so make sure to handle it correctly.
+
+And that's it. Your exchange will now be run. 
