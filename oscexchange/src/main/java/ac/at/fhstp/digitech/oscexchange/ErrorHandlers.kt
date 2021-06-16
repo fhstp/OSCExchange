@@ -13,6 +13,7 @@ object ErrorHandlers {
     val print: ErrorHandler =
         { error -> println(error.message) }
 
+
     fun log(tag: String): ErrorHandler =
         { error -> Log.e(tag, error.message, error.cause) }
 
