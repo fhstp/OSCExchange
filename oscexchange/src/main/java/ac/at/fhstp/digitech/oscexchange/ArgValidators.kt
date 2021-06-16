@@ -1,41 +1,41 @@
 package ac.at.fhstp.digitech.oscexchange
 
-typealias Validator = (OSCArgs) -> Boolean
+typealias ArgValidator = (OSCArgs) -> Boolean
 
 object Validators {
 
     @PublicApi
-    val noValidation: Validator =
+    val noValidation: ArgValidator =
         { true }
 
     @PublicApi
-    val hasNoArgs: Validator =
+    val hasNoArgs: ArgValidator =
         hasArgCount(0)
 
     @PublicApi
-    val hasSingleArg: Validator =
+    val hasSingleArg: ArgValidator =
         hasArgCount(1)
 
 
     @PublicApi
-    inline fun <reified T> hasSingleArgOfType(): Validator =
+    inline fun <reified T> hasSingleArgOfType(): ArgValidator =
         hasSingleArg.and { args -> args.hasArgOfType<T>(0) }
 
     @PublicApi
-    fun hasArgCount(count: Int): Validator =
+    fun hasArgCount(count: Int): ArgValidator =
         { args -> args.count() == count }
 
 
     @PublicApi
-    fun Validator.and(other: Validator) =
+    fun ArgValidator.and(other: ArgValidator) =
         { args: OSCArgs -> this(args) && other(args) }
 
     @PublicApi
-    fun Validator.or(other: Validator) =
+    fun ArgValidator.or(other: ArgValidator) =
         { args: OSCArgs -> this(args) || other(args) }
 
     @PublicApi
-    fun Validator.inv(): Validator =
+    fun ArgValidator.inv(): ArgValidator =
         { args -> !this(args) }
 
 }

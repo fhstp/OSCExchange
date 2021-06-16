@@ -32,7 +32,7 @@ data class ReceiveRequest(
         private val address: OSCAddress,
         private val onReceived: (OSCArgs) -> Unit,
         private val parser: RequestParser<*>?,
-        private val validator: Validator,
+        private val validator: ArgValidator,
         private val onError: ErrorHandler
     ) : RequestBuilder<ReceiveRequest> {
 
