@@ -51,11 +51,11 @@ class OSCArgs private constructor(private val args: Array<Any>) {
      * @return The number of arguments
      */
     @PublicApi
-    fun argCount(): Int =
+    fun count(): Int =
         args.size
 
     fun getArg(index: Int) =
-        if (argCount() > index) Optional.of(args[index])
+        if (count() > index) Optional.of(args[index])
         else Optional.empty()
 
     /**

@@ -23,7 +23,7 @@ object Validators {
 
     @PublicApi
     fun hasArgCount(count: Int): Validator =
-        { args -> args.argCount() == count }
+        { args -> args.count() == count }
 
 
     @PublicApi
