@@ -5,11 +5,11 @@ import java.util.*
 /**
  * Stores arguments that can be sent or received over OSC
  */
-class OSCArgs private constructor(private val args: Array<Any>) {
+class OSCArgs private constructor(private val args: Array<out Any>) {
 
     companion object {
 
-        val empty = ofList(listOf())
+        val empty = multiple()
 
         /**
          * Creates OSCArgs from a single argument
@@ -18,9 +18,8 @@ class OSCArgs private constructor(private val args: Array<Any>) {
          * @return The created OSCArgs
          */
         @PublicApi
-        fun single(arg: Any): OSCArgs {
-            return multiple(arg)
-        }
+        fun single(arg: Any) =
+            multiple(arg)
 
         /**
          * Creates OSCArgs from multiple arguments
@@ -29,9 +28,8 @@ class OSCArgs private constructor(private val args: Array<Any>) {
          * @return The created OSCArgs
          */
         @PublicApi
-        fun multiple(vararg args: Any): OSCArgs {
-            return OSCArgs(arrayOf(args))
-        }
+        fun multiple(vararg args: Any) =
+            OSCArgs(args)
 
         /**
          * Creates OSCArgs from a list of arguments
@@ -40,9 +38,9 @@ class OSCArgs private constructor(private val args: Array<Any>) {
          * @return The created OSCArgs
          */
         @PublicApi
-        fun ofList(args: List<Any>): OSCArgs {
-            return OSCArgs(args.toTypedArray())
-        }
+        fun ofList(args: List<Any>) =
+            OSCArgs(args.toTypedArray())
+
     }
 
     /**
