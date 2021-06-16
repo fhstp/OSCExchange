@@ -1,10 +1,11 @@
 package ac.at.fhstp.digitech.oscexchange.requests
 
+import ac.at.fhstp.digitech.oscexchange.ArgParser
 import ac.at.fhstp.digitech.oscexchange.OSCArgs
 import ac.at.fhstp.digitech.oscexchange.errors.OSCParsingException
 
 class RequestParser<TParsed>(
-    private val parser: (OSCArgs) -> TParsed?,
+    private val parser: ArgParser<TParsed>,
     private val onParseSuccess: (TParsed) -> Unit
 ) {
 

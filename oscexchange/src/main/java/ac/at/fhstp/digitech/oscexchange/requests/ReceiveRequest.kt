@@ -61,9 +61,9 @@ data class ReceiveRequest(
             copy(onReceived = onReceived)
 
         @PublicApi
-        fun <T> withParser(
-            parser: (OSCArgs) -> T?,
-            onParseSuccess: (T) -> Unit
+        fun <TParsed> withParser(
+            parser: ArgParser<TParsed>,
+            onParseSuccess: (TParsed) -> Unit
         ) =
             withParser(RequestParser(parser, onParseSuccess))
 
