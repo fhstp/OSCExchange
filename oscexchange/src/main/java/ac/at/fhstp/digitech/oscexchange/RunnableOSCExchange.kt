@@ -1,6 +1,7 @@
 package ac.at.fhstp.digitech.oscexchange
 
 import ac.at.fhstp.digitech.oscexchange.errors.OSCMessageException
+import ac.at.fhstp.digitech.oscexchange.errors.OSCPortClosingException
 import ac.at.fhstp.digitech.oscexchange.errors.OSCPortUseException
 import ac.at.fhstp.digitech.oscexchange.requests.ReceiveRequest
 import ac.at.fhstp.digitech.oscexchange.requests.Request
@@ -32,6 +33,8 @@ class RunnableOSCExchange(
         val onContinue = {
             if (index < requests.size - 1)
                 runRequestAtIndex(index + 1)
+            else
+                completeExchange()
         }
         runRequest(request, onContinue)
     }
@@ -91,6 +94,24 @@ class RunnableOSCExchange(
 
         inPort.dispatcher.addListener(selector, listener.value)
         inPort.startListening()
+    }
+
+    private fun completeExchange() {
+        try {
+            outPort.close()
+        } catch (e: Exception) {
+            throw OSCPortClosingException(
+                OSCPort.Out, "Could not close out port", e
+            )
+        }
+
+        try {
+            inPort.close()
+        } catch (e: Exception) {
+            throw OSCPortClosingException(
+                OSCPort.In, "Could not close in port", e
+            )
+        }
     }
 
 }
