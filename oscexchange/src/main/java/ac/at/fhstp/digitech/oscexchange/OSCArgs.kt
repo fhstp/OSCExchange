@@ -9,6 +9,9 @@ class OSCArgs private constructor(private val args: Array<out Any>) {
 
     companion object {
 
+        /**
+         * And empty set of OSCArgs
+         */
         val empty = multiple()
 
         /**
@@ -82,6 +85,11 @@ class OSCArgs private constructor(private val args: Array<out Any>) {
     inline fun <reified T> hasArgOfType(index: Int): Boolean =
         tryGetArgOfType<T>(index).isPresent
 
+    /**
+     * Gets the arguments in this OSCArgs in the form of a list
+     *
+     * @return The list
+     */
     @PublicApi
     fun asList() =
         args.toList()
