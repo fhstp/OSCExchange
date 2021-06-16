@@ -1,7 +1,6 @@
 package ac.at.fhstp.digitech.oscexchange.requests
 
 import ac.at.fhstp.digitech.oscexchange.*
-import ac.at.fhstp.digitech.oscexchange.errors.OSCException
 import ac.at.fhstp.digitech.oscexchange.errors.OSCValidationException
 import java.util.*
 
