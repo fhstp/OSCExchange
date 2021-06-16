@@ -86,6 +86,6 @@ class OSCArgs private constructor(private val args: Array<Any>) {
 
     @PublicApi
     fun asList() =
-        listOf(args)
+        args.toList()
 
 }
