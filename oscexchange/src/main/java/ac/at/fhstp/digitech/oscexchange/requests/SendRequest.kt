@@ -1,16 +1,13 @@
 package ac.at.fhstp.digitech.oscexchange.requests
 
-import ac.at.fhstp.digitech.oscexchange.OSCAddress
-import ac.at.fhstp.digitech.oscexchange.OSCArgs
-import ac.at.fhstp.digitech.oscexchange.PublicApi
-import ac.at.fhstp.digitech.oscexchange.errors.OSCException
+import ac.at.fhstp.digitech.oscexchange.*
 import com.illposed.osc.OSCMessage
 import java.util.*
 
 data class SendRequest(
     val address: OSCAddress,
     val argsGenerator: () -> OSCArgs,
-    val onError: (OSCException) -> Unit,
+    val onError: ErrorHandler,
     val onSuccess: () -> Unit
 ) : Request {
 
@@ -25,7 +22,7 @@ data class SendRequest(
         fun new(address: OSCAddress) =
             Builder(
                 address, emptyArgsGenerator,
-                Request.noErrorHandling, noSuccessHandling
+                ErrorHandlers.noErrorHandling, noSuccessHandling
             )
 
         @PublicApi
@@ -43,7 +40,7 @@ data class SendRequest(
     data class Builder(
         private val address: OSCAddress,
         private val argsGenerator: () -> OSCArgs,
-        private val onError: (OSCException) -> Unit,
+        private val onError: ErrorHandler,
         private val onSuccess: () -> Unit
     ) : RequestBuilder<SendRequest> {
 
@@ -59,7 +56,7 @@ data class SendRequest(
             copy(argsGenerator = argsGenerator)
 
         @PublicApi
-        fun onError(onError: (OSCException) -> Unit) =
+        fun onError(onError: ErrorHandler) =
             copy(onError = onError)
 
         @PublicApi

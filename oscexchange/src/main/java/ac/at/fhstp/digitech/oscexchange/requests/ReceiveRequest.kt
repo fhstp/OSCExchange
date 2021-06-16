@@ -7,7 +7,7 @@ import java.util.*
 
 data class ReceiveRequest(
     val address: OSCAddress,
-    val onError: (OSCException) -> Unit,
+    val onError: ErrorHandler,
     val onReceived: (OSCArgs) -> Unit
 ) : Request {
 
@@ -19,7 +19,7 @@ data class ReceiveRequest(
         fun new(address: OSCAddress) =
             Builder(
                 address, noReceiveHandling, null,
-                Validators.noValidation, Request.noErrorHandling
+                Validators.noValidation, ErrorHandlers.noErrorHandling
             )
 
         @PublicApi
@@ -34,7 +34,7 @@ data class ReceiveRequest(
         private val onReceived: (OSCArgs) -> Unit,
         private val parser: RequestParser<*>?,
         private val validator: Validator,
-        private val onError: (OSCException) -> Unit
+        private val onError: ErrorHandler
     ) : RequestBuilder<ReceiveRequest> {
 
         override fun build(): ReceiveRequest =
@@ -77,7 +77,7 @@ data class ReceiveRequest(
             copy(validator = validator)
 
         @PublicApi
-        fun onError(onError: (OSCException) -> Unit) =
+        fun onError(onError: ErrorHandler) =
             copy(onError = onError)
 
     }
