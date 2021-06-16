@@ -6,20 +6,17 @@ import java.util.*
 
 data class SendRequest(
     val address: OSCAddress,
-    val argsGenerator: () -> OSCArgs,
+    val argsGenerator: ArgGenerator,
     val onError: ErrorHandler,
     val onSuccess: SuccessHandler
 ) : Request {
 
     companion object {
 
-        private val emptyArgsGenerator = { OSCArgs.empty }
-
-
         @PublicApi
         fun new(address: OSCAddress) =
             Builder(
-                address, emptyArgsGenerator,
+                address, ArgGenerators.empty,
                 ErrorHandlers.noErrorHandling, SuccessHandlers.noSuccessHandling
             )
 
@@ -37,7 +34,7 @@ data class SendRequest(
 
     data class Builder(
         private val address: OSCAddress,
-        private val argsGenerator: () -> OSCArgs,
+        private val argsGenerator: ArgGenerator,
         private val onError: ErrorHandler,
         private val onSuccess: SuccessHandler
     ) : RequestBuilder<SendRequest> {
@@ -47,10 +44,10 @@ data class SendRequest(
 
         @PublicApi
         fun withArgs(args: OSCArgs) =
-            withArgsGenerator(argsGenerator = { args })
+            withArgsGenerator(ArgGenerators.constant(args))
 
         @PublicApi
-        fun withArgsGenerator(argsGenerator: () -> OSCArgs) =
+        fun withArgsGenerator(argsGenerator: ArgGenerator) =
             copy(argsGenerator = argsGenerator)
 
         @PublicApi
