@@ -5,7 +5,7 @@ project.
 
 First define the devices addresses
 
-```OSCDevicePair pair = new OSCDevicePair(localAddress, remoteAddress);```
+```val pair = OSCDevicePair(localAddress, remoteAddress)```
 
 Next plan the exchange you want to have between the devices
 
