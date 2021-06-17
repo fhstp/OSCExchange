@@ -7,18 +7,26 @@ import java.util.*
 data class ReceiveRequest(
     val address: OSCAddress,
     val onError: ErrorHandler,
-    val onReceived: (OSCArgs) -> Unit
+    val onReceived: (OSCArgs) -> Unit,
+    val timeout: Long?
 ) : Request {
 
     companion object {
+
+        @PublicApi
+        const val DEFAULT_TIMEOUT = 5000L
 
         private val noReceiveHandling = { _: OSCArgs -> }
 
         @PublicApi
         fun new(address: OSCAddress) =
             Builder(
-                address, noReceiveHandling, null,
-                ArgValidators.noValidation, ErrorHandlers.noErrorHandling
+                address,
+                noReceiveHandling,
+                null,
+                ArgValidators.noValidation,
+                ErrorHandlers.noErrorHandling,
+                DEFAULT_TIMEOUT
             )
 
         @PublicApi
@@ -33,11 +41,12 @@ data class ReceiveRequest(
         private val onReceived: (OSCArgs) -> Unit,
         private val parser: RequestParser<*>?,
         private val validator: ArgValidator,
-        private val onError: ErrorHandler
+        private val onError: ErrorHandler,
+        private val timeout: Long?
     ) : RequestBuilder<ReceiveRequest> {
 
         override fun build(): ReceiveRequest =
-            ReceiveRequest(address, onError, buildReceiveHandler())
+            ReceiveRequest(address, onError, buildReceiveHandler(), timeout)
 
         private fun buildReceiveHandler() =
             { args: OSCArgs ->
@@ -74,6 +83,14 @@ data class ReceiveRequest(
         @PublicApi
         fun withValidator(validator: (OSCArgs) -> Boolean) =
             copy(validator = validator)
+
+        @PublicApi
+        fun withTimeout(millis: Long) =
+            copy(timeout = millis)
+
+        @PublicApi
+        fun withoutTimeout() =
+            copy(timeout = null)
 
         @PublicApi
         fun onError(onError: ErrorHandler) =

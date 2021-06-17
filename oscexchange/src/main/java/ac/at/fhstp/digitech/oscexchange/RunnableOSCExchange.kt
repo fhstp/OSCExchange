@@ -3,9 +3,12 @@ package ac.at.fhstp.digitech.oscexchange
 import ac.at.fhstp.digitech.oscexchange.errors.OSCMessageException
 import ac.at.fhstp.digitech.oscexchange.errors.OSCPortClosingException
 import ac.at.fhstp.digitech.oscexchange.errors.OSCPortUseException
+import ac.at.fhstp.digitech.oscexchange.errors.OSCTimeoutException
 import ac.at.fhstp.digitech.oscexchange.requests.ReceiveRequest
 import ac.at.fhstp.digitech.oscexchange.requests.Request
 import ac.at.fhstp.digitech.oscexchange.requests.SendRequest
+import android.os.Handler
+import android.os.Looper
 import com.illposed.osc.OSCMessageListener
 import com.illposed.osc.OSCSerializeException
 import com.illposed.osc.messageselector.OSCPatternAddressMessageSelector
@@ -87,6 +90,15 @@ class RunnableOSCExchange(
         val selector = OSCPatternAddressMessageSelector(request.address.value)
         val listener = ForwardRef<OSCMessageListener>()
 
+        val timeoutHandler = Handler(Looper.getMainLooper())
+        val timeoutRunnable = Runnable {
+            inPort.dispatcher.removeListener(selector, listener.value)
+            inPort.stopListening()
+
+            @Suppress("ThrowableNotThrown")
+            request.onError(OSCTimeoutException(request.timeout!!))
+        }
+
         listener.value = OSCMessageListener {
             inPort.dispatcher.removeListener(selector, listener.value)
             inPort.stopListening()
@@ -94,9 +106,14 @@ class RunnableOSCExchange(
             val args = OSCArgs.ofList(it.message.arguments)
             request.onReceived(args)
 
+            timeoutHandler.removeCallbacks(timeoutRunnable)
+
             // TODO: Allow config to only continue if no errors occurred
             onContinue()
         }
+
+        if (request.timeout != null)
+            timeoutHandler.postDelayed(timeoutRunnable, request.timeout)
 
         inPort.dispatcher.addListener(selector, listener.value)
         inPort.startListening()

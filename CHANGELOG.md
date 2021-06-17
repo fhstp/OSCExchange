@@ -1,5 +1,11 @@
 # OSCExchange Changelog
 
+## 2.1.0 - 
+
+### Added
+
+- Added request timeout logic for receive-requests
+
 ## 2.0.0 - 2021-June-16
 
 ### Changed
