@@ -60,4 +60,27 @@ parsed object, like this:
 ```
 ReceiveRequest.new(address)
               .withParser(instrumentParser, { instrument -> })
- ```
+```
+
+## Timeouts
+
+Most of the time, you don't want to wait for an answer from a remote forever.
+This is why all `ReceiveRequests` have a standard timeout of 5000 milli-seconds,
+after which a `OSCTimeoutException` is sent to the requests `onError` handler.
+
+The timeout time can be changed by adding a `withTimout` call to the request
+builder like this:
+
+```
+ReceiveRequest.new(address)
+              .withTimeout(1000)
+```
+
+In this case, the timeout was shortened to 1000 milli-seconds.
+
+The timeout can also be disabled by calling `withoutTimeout` instead:
+
+```
+ReceiveRequest.new(address)
+              .withoutTimeout()
+```
