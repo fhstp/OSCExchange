@@ -1,6 +1,6 @@
 # OSCExchange Changelog
 
-## 2.1.0 - 
+## 2.1.0 - 2021-June-17
 
 ### Added
 
