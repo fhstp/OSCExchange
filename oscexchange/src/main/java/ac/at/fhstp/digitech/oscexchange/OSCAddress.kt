@@ -1,5 +1,7 @@
 package ac.at.fhstp.digitech.oscexchange
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.util.*
 import java.util.regex.Pattern
 
@@ -8,7 +10,9 @@ import java.util.regex.Pattern
  *
  * @see OSCAddress.tryCreate
  */
-class OSCAddress private constructor(@PublicApi val value: String?) {
+@Parcelize
+class OSCAddress private constructor(@PublicApi val value: String?) :
+    Parcelable {
     companion object {
         /**
          * The pattern used to validate OSCAddresses
