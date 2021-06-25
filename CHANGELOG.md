@@ -1,5 +1,11 @@
 # OSCExchange Changelog
 
+## 2.2.0 - 2021-June-25
+
+### Changed
+
+- Make OSCAddress and OSCDevicePair parcelable
+
 ## 2.1.0 - 2021-June-17
 
 ### Added
