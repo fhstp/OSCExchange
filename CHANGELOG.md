@@ -1,5 +1,11 @@
 # OSCExchange Changelog
 
+## 2.3.0 - 2021-August-16
+
+### Fixed
+
+- Fixed issue when waiting for multiple requests to answer. The first request to return would close the port from listening, making the other requests timeout
+
 ## 2.2.0 - 2021-June-25
 
 ### Changed

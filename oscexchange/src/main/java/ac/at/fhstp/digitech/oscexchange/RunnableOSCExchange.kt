@@ -10,6 +10,7 @@ import ac.at.fhstp.digitech.oscexchange.requests.SendRequest
 import android.os.Handler
 import android.os.Looper
 import com.illposed.osc.OSCMessageListener
+import com.illposed.osc.OSCPacketDispatcher
 import com.illposed.osc.OSCSerializeException
 import com.illposed.osc.messageselector.OSCPatternAddressMessageSelector
 import com.illposed.osc.transport.udp.OSCPortIn
@@ -101,7 +102,9 @@ class RunnableOSCExchange(
 
         listener.value = OSCMessageListener {
             inPort.dispatcher.removeListener(selector, listener.value)
-            inPort.stopListening()
+
+            if (!hasListeners(inPort.dispatcher))
+                inPort.stopListening()
 
             val args = OSCArgs.ofList(it.message.arguments)
             request.onReceived(args)
@@ -115,8 +118,9 @@ class RunnableOSCExchange(
         if (request.timeout != null)
             timeoutHandler.postDelayed(timeoutRunnable, request.timeout)
 
+        if (!hasListeners(inPort.dispatcher))
+            inPort.startListening()
         inPort.dispatcher.addListener(selector, listener.value)
-        inPort.startListening()
     }
 
     private fun completeExchange() {
@@ -135,6 +139,13 @@ class RunnableOSCExchange(
                 OSCPort.In, "Could not close in port", e
             )
         }
+    }
+
+    private fun hasListeners(dispatcher: OSCPacketDispatcher): Boolean {
+        val field =
+            dispatcher.javaClass.getDeclaredField("selectiveMessageListeners")
+        val list = field.get(dispatcher) as List<*>
+        return list.isEmpty()
     }
 
 }
