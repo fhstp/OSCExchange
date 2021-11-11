@@ -27,6 +27,10 @@ class RunnableOSCExchange(
     private val outPort: OSCPortOut
 ) {
 
+    init {
+        inPort.startListening()
+    }
+
     /**
      * Runs the exchange
      */
@@ -92,16 +96,13 @@ class RunnableOSCExchange(
 
         val timeoutHandler = Handler(Looper.getMainLooper())
         val timeoutRunnable = Runnable {
-            inPort.dispatcher.removeListener(selector, listener.value)
             inPort.stopListening()
-
             @Suppress("ThrowableNotThrown")
             request.onError(OSCTimeoutException(request.timeout!!))
         }
 
         listener.value = OSCMessageListener {
             inPort.dispatcher.removeListener(selector, listener.value)
-            inPort.stopListening()
 
             val args = OSCArgs.ofList(it.message.arguments)
             request.onReceived(args)
@@ -116,7 +117,6 @@ class RunnableOSCExchange(
             timeoutHandler.postDelayed(timeoutRunnable, request.timeout)
 
         inPort.dispatcher.addListener(selector, listener.value)
-        inPort.startListening()
     }
 
     private fun completeExchange() {
@@ -129,6 +129,7 @@ class RunnableOSCExchange(
         }
 
         try {
+            inPort.stopListening()
             inPort.close()
         } catch (e: Exception) {
             throw OSCPortClosingException(
